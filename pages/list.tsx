@@ -1,13 +1,13 @@
 //import TableauEmbed from '../components/tableau'
-import TableauEmbedFunc from '../../components/tableaufun'
+import TableauEmbedFunc from '../components/tableaufun'
 //import BasicEmbed from '../components/basicembed'
-import Disclaimer from '../../components/disclaimer'
+import Disclaimer from '../components/disclaimer'
 
-import NavTabs from '../../components/tabs'
+import NavTabs from '../components/tabs'
 
 import { Tab } from '@headlessui/react'
 
-import HousingNav from '../../components/housingnav'
+import HousingNav from '../components/housingnav'
 
 import Head from 'next/head'
 
@@ -15,7 +15,7 @@ import React from 'react'
 import dynamic from 'next/dynamic'
 
 const DynamicComponentWithNoSSR = dynamic(
-  () => import('../../components/tableaufun'),
+  () => import('../components/tableaufun'),
   { ssr: false }
 )
 
