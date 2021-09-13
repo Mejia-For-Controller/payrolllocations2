@@ -2,11 +2,11 @@ import ActiveLink from './ActiveLink'
 const navigationPayroll = [
   {
     'name': "Map",
-    'url': "/housing/"
+    'url': "/"
   },
   {
     'name': "List",
-    'url': "/housing/list"
+    'url': "list"
   }
 ]
 
