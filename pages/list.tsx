@@ -22,7 +22,7 @@ const DynamicComponentWithNoSSR = dynamic(
 function Payroll() {
   return <div className='height100'>
     <Head>
-      <title>LA Payroll 2020 Employee Names and Salaries - Kentrol Panel</title>
+      <title>Affordable Housing Covenants - 2010 to May 2021 | List</title>
       <meta property="og:type" content="website"/>
       <meta name="twitter:site" content="@kennethmejiala" />
         <meta name="twitter:creator" content="@kennethmejiala" />
