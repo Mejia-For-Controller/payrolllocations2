@@ -27,8 +27,8 @@ function Payroll() {
       <meta name="twitter:site" content="@kennethmejiala" />
         <meta name="twitter:creator" content="@kennethmejiala" />
 <meta name="twitter:card" content="summary_large_image"/>
-    <meta name="twitter:title" key='twittertitle' content="2021 Affordable Housing"></meta>
-<meta name="twitter:description"  key='twitterdesc' content="Map of Affordable housing in Los Angeles"></meta>
+    <meta name="twitter:title" key='twittertitle' content="Affordable Housing Covenants - 2010 to May 2021 | Map"></meta>
+<meta name="twitter:description"  key='twitterdesc' content="Browse and Search Affordable Housing in Los Angeles"></meta>
 <meta name="twitter:image" key='twitterimg' content="https://data.mejiaforcontroller.com/affordablehousingpic.png"></meta>
     </Head>
     <div suppressHydrationWarning={true} className='height100'>
