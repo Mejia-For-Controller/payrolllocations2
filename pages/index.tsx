@@ -30,7 +30,7 @@ function Payroll() {
     <meta name="twitter:title" key='twittertitle' content="Affordable Housing Covenants - 2010 to May 2021 | Map"></meta>
 <meta name="twitter:description"  key='twitterdesc' content="Browse and Search Affordable Housing in Los Angeles"></meta>
       <meta name="twitter:image" key='twitterimg' content="https://data.mejiaforcontroller.com/affordablehousingpic.png"></meta>
-      
+      <meta name="twitter:image:alt" content="Where is LA's Affordable Housing? | Kenneth Mejia for LA City Controller"/>
 
       <meta property="og:url"                content="https://affordablehousing.mejiaforcontroller.com/" />
 <meta property="og:type"               content="website" />
