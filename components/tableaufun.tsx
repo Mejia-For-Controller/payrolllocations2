@@ -123,8 +123,8 @@ const TableauEmbedFunc = (props) => {
       <div className='tableauembed height100' ref={(div) => {
       vizContainer = div;
       }}>
-        <p className="text-center loadinginfo corgiloading sm:p-4 md:p-8 sm:text-sm md:text-base max-w-full">Our team of well-fed corgis are downloading and visualizing your data.
-         This may take a few seconds, please wait.</p>
+        <p className="text-center loadinginfo corgiloading sm:p-4 md:p-8 sm:text-sm md:text-base max-w-full"><span data-nosnippet>Our team of well-fed corgis are downloading and visualizing your data.
+         This may take a few seconds, please wait.</span></p>
     </div>
     </div>
    
