@@ -29,7 +29,14 @@ function Payroll() {
 <meta name="twitter:card" content="summary_large_image"/>
     <meta name="twitter:title" key='twittertitle' content="Affordable Housing Covenants - 2010 to May 2021 | Map"></meta>
 <meta name="twitter:description"  key='twitterdesc' content="Browse and Search Affordable Housing in Los Angeles"></meta>
-<meta name="twitter:image" key='twitterimg' content="https://data.mejiaforcontroller.com/affordablehousingpic.png"></meta>
+      <meta name="twitter:image" key='twitterimg' content="https://data.mejiaforcontroller.com/affordablehousingpic.png"></meta>
+      
+
+      <meta property="og:url"                content="https://affordablehousing.mejiaforcontroller.com/" />
+<meta property="og:type"               content="website" />
+<meta property="og:title"              content="Affordable Housing Covenants - 2010 to May 2021 | Map" />
+<meta property="og:description"        content="Browse and Search Affordable Housing in Los Angeles" />
+<meta property="og:image"              content="https://data.mejiaforcontroller.com/affordablehousingpic.png" />
     </Head>
     <div suppressHydrationWarning={true} className='height100'>
       <React.StrictMode>
