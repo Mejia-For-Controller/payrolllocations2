@@ -31,6 +31,7 @@ function Payroll() {
       <meta name="twitter:description" key='twitterdesc' content="Browse and Search Affordable Housing in Los Angeles"></meta>
       <meta name="twitter:image:alt" content="Where is LA's Affordable Housing? | Kenneth Mejia for LA City Controller"/>
       <meta name="twitter:image" key='twitterimg' content="https://data.mejiaforcontroller.com/affordablehousingpic.png"></meta>
+      <meta name="description" content="A Map of Affordable Housing in Los Angeles. Find Housing near you." />
       
       <meta property="og:url"                content="https://affordablehousing.mejiaforcontroller.com/" />
 <meta property="og:type"               content="website" />
