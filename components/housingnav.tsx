@@ -6,7 +6,7 @@ const navigationPayroll = [
   },
   {
     'name': "List",
-    'url': "list"
+    'url': "/list"
   }
 ]
 
