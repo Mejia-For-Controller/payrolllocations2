@@ -22,29 +22,27 @@ const DynamicComponentWithNoSSR = dynamic(
 function Payroll() {
   return <div className='height100'>
     <Head>
-      <title>Affordable Housing Covenants - 2010 to May 2021 | Map</title>
+      <title>Where do LA City Employees Live? - Interactive Map</title>
       <meta property="og:type" content="website"/>
       <meta name="twitter:site" content="@kennethmejiala" />
         <meta name="twitter:creator" content="@kennethmejiala" />
 <meta name="twitter:card" content="summary_large_image"/>
-    <meta name="twitter:title" key='twittertitle' content="Affordable Housing Covenants - 2010 to May 2021 | Map"></meta>
-<meta name="twitter:description"  key='twitterdesc' content="Browse and Search Affordable Housing in Los Angeles"></meta>
-      <meta name="twitter:image" key='twitterimg' content="https://data.mejiaforcontroller.com/affordablehousingpic.png"></meta>
-      <meta name="twitter:image:alt" content="Where is LA's Affordable Housing? | Kenneth Mejia for LA City Controller" />
-      <meta name="description" content="A Map of Affordable Housing in Los Angeles. Find Housing near you." />
+    <meta name="twitter:title" key='twittertitle' content="Where do LA City Employees Live? - Interactive Map"></meta>
+<meta name="twitter:description"  key='twitterdesc' content="LA City Employee Locations and Gross Pay | 2021 Jan - Sep"></meta>
+      <meta name="description" content="LA City Employee Locations and Gross Pay | 2021 Jan - Sep" />
 
       <meta property="og:url"                content="https://affordablehousing.mejiaforcontroller.com/" />
 <meta property="og:type"               content="website" />
-<meta property="og:title"              content="Affordable Housing Covenants - 2010 to May 2021 | Map" />
-<meta property="og:description"        content="Browse and Search Affordable Housing in Los Angeles" />
-<meta property="og:image"              content="https://data.mejiaforcontroller.com/affordablehousingpic.png" />
+<meta property="og:title"              content="Where do LA City Employees Live? | Map" />
+<meta property="og:description"        content="LA City Employee Locations and Gross Pay | 2021 Jan - Sep" />
+<meta property="og:image"              content="" />
     </Head>
     <div suppressHydrationWarning={true} className='height100'>
       <React.StrictMode>
         <HousingNav/>
         <DynamicComponentWithNoSSR
           key='payroll1'
-          url='https://public.tableau.com/views/AffordableHousingLA/map?:language=en-US&:display_count=n&:origin=viz_share_link'
+          url='https://public.tableau.com/views/payrollv3/Dashboard1?:language=en-US&publish=yes&:display_count=n&:origin=viz_share_link'
         />
        
   </React.StrictMode>
