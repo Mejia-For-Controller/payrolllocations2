@@ -30,12 +30,12 @@ function Payroll() {
     <meta name="twitter:title" key='twittertitle' content="Where do LA City Employees Live? - Interactive Map"></meta>
 <meta name="twitter:description"  key='twitterdesc' content="LA City Employee Locations and Gross Pay | 2021 Jan - Sep"></meta>
       <meta name="description" content="LA City Employee Locations and Gross Pay | 2021 Jan - Sep" />
-
-      <meta property="og:url"                content="https://affordablehousing.mejiaforcontroller.com/" />
+      <meta name="twitter:image" key='twitterimg' content="https://citypayareas.mejiaforcontroller.com/thumbnail.png"></meta>
+      <meta property="og:url"                content="https://citypayareas.mejiaforcontroller.com/" />
 <meta property="og:type"               content="website" />
 <meta property="og:title"              content="Where do LA City Employees Live? | Map" />
 <meta property="og:description"        content="LA City Employee Locations and Gross Pay | 2021 Jan - Sep" />
-<meta property="og:image"              content="" />
+<meta property="og:image"              content="https://citypayareas.mejiaforcontroller.com/thumbnail.png" />
     </Head>
     <div suppressHydrationWarning={true} className='height100'>
       <React.StrictMode>
