@@ -16,7 +16,7 @@ function HousingNav() {
       {navigationPayroll.map((item, itemIdx) =>
                      
               
-                     <ActiveLink activeClassName="text-gray-600 py-3 px-6 block hover:text-green-300 focus:outline-none text-green-300 border-b-2 font-medium border-green-300" href={item.url}
+                     <ActiveLink activeClassName="text-gray-100 py-3 px-6 block hover:text-green-300 focus:outline-none text-green-300 border-b-2 font-medium border-green-300" href={item.url}
                      key={itemIdx}
                      >
                      <a className="text-gray-600 py-3 px-6 block hover:text-green-300 focus:outline-none">
