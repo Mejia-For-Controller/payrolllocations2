@@ -47,6 +47,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta property='twitter:site' content='@kennethmejiala' />
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css"></link>
         <script key='tableauscript' src='https://public.tableau.com/javascripts/api/tableau-2.8.1.min.js'></script>
+        
+<script defer={true} src="https://helianthus.mejiaforcontroller.com/index.js"></script>
       </Head>
       <Component {...pageProps} class='height100'/>
     </div>
