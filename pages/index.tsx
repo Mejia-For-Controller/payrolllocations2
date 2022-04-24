@@ -23,9 +23,7 @@ import Head from 'next/head'
 import React, {useRef, useState, useCallback, useContext, useEffect, useMemo, useReducer
 } from 'react'
 import dynamic from 'next/dynamic'
-
-
-const MapboxWorker = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker');
+//const MapboxWorker = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker');
 
 const citybound = require('./citybounds.json')
 
