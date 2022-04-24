@@ -4,7 +4,6 @@
 //import TableauEmbed from '../components/tableau'
 import TableauEmbedFunc from '../components/tableaufun'
 //import BasicEmbed from '../components/basicembed'
-import Disclaimer from '../components/disclaimer'
 // Import Lodash library
 import _ from "lodash";
 import {MapboxMejiaSwitch} from '../components/mapboxswitch'
@@ -570,7 +569,7 @@ const popup = new mapboxgl.Popup({
   const coordinates = e.features[0].geometry.coordinates.slice();
   const description = `${e.features[0].properties.city}, ${e.features[0].properties.state}<br>
   <b>Number of Employees</b>${e.features[0].properties.employeecount}<br>
-  <b>Gross Total</b> $${parseInt(e.features[0].properties.gross).toFixed(0).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}`;
+  <b>Gross Total</b> $${parseInt(e.features[0].properties.gross).toFixed(0).toLocaleString()}`;
    
 //console.log(e.features)
 
