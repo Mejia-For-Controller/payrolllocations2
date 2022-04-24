@@ -1,8 +1,4 @@
 //import 'tailwindcss/tailwind.css'
-
-
-//import TableauEmbed from '../components/tableau'
-import TableauEmbedFunc from '../components/tableaufun'
 //import BasicEmbed from '../components/basicembed'
 // Import Lodash library
 import _ from "lodash";
@@ -11,7 +7,7 @@ import NavTabs from '../components/tabs'
 import { Switch } from '@headlessui/react'
 import { Tab } from '@headlessui/react'
 import employeedata from './data.json'
-Object.freeze(employeedata)
+
 import Nav from '../components/nav'
 
 import {simpleHash} from '../components/hash'
@@ -28,6 +24,8 @@ import Head from 'next/head'
 import React, {useRef, useState, useCallback, useContext, useEffect, useMemo, useReducer
 } from 'react'
 import dynamic from 'next/dynamic'
+
+Object.freeze(employeedata)
 
 const citybound = require('./citybounds.json')
 
