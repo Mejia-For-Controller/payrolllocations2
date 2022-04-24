@@ -7,7 +7,7 @@ import NavTabs from '../components/tabs'
 
 import { Tab } from '@headlessui/react'
 
-import HousingNav from '../components/housingnav'
+import HousingNav from '../components/nav'
 
 import Head from 'next/head'
 

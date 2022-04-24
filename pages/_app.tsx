@@ -1,6 +1,9 @@
 //import 'tailwindcss/tailwind.css'
+import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import '../styles/globals.css'
 import './App.css'
+
+import './mapbox.css'
 import type { AppProps } from 'next/app'
 //import './App.css';
 import Head from 'next/head'
