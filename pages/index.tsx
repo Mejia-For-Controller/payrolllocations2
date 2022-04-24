@@ -14,7 +14,6 @@ import {simpleHash} from '../components/hash'
 // eslint-disable-next-line import/no-webpack-loader-syntax
 
 import {DisclaimerPopup} from '../components/Disclaimer'
-import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
@@ -25,9 +24,12 @@ import React, {useRef, useState, useCallback, useContext, useEffect, useMemo, us
 } from 'react'
 import dynamic from 'next/dynamic'
 
-Object.freeze(employeedata)
+
+const MapboxWorker = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker');
 
 const citybound = require('./citybounds.json')
+
+Object.freeze(employeedata)
 
 
 var blankgeojson:any = {
