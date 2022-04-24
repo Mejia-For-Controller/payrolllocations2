@@ -19,7 +19,7 @@ import {simpleHash} from '../components/hash'
 
 import {DisclaimerPopup} from '../components/Disclaimer'
 import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker';
-import mapboxgl from 'mapbox-gl';
+import * as mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 
@@ -32,7 +32,7 @@ import dynamic from 'next/dynamic'
 const citybound = require('./citybounds.json')
 
 
-var blankgeojson = {
+var blankgeojson:any = {
   "features": [
   ],
   "type": "FeatureCollection"
@@ -94,6 +94,7 @@ function Payroll() {
   let [filterOpen, setFilterOpen] = useState(false)
 
   let [mergeNeighborhoods, setMergeNeighborhoods] = useState(true)
+  let [overlaytext, setOverlaytext] = useState(true)
   let [neighDidFirstRender,setNeighDidFirstRender] = useState(false)
 
 
@@ -695,7 +696,14 @@ const popup = new mapboxgl.Popup({
        />
         <span>Merge LA Neighborhoods</span>
         </div>
-        
+        <div className='flex flex-row gap-x-1'>
+       <MapboxMejiaSwitch
+       screenreader="Overlay Text Labels"
+       checked={overlaytext}
+       onChange={setOverlaytext}
+       />
+        <span>Overlay City Labels</span>
+        </div>
 
         
       </div>
