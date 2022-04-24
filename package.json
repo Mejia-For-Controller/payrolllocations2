@@ -22,7 +22,7 @@
     "eslint-plugin-flowtype": "^5.8.2",
     "eslint-plugin-testing-library": "^3.10.2",
     "jquery-csv": "^1.0.21",
-    "mapbox-gl": "https://github.com/mapbox/mapbox-gl-js",
+    "mapbox-gl": "github:mapbox/mapbox-gl-js",
     "next": "^11.0.1",
     "postcss": "^8.0.0",
     "postcss-preset-env": "^6.7.0",
