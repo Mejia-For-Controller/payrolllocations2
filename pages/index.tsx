@@ -154,8 +154,14 @@ function checkHideOrShowTopRightGeocoder() {
 
 const handleResize = () => {
   checkHideOrShowTopRightGeocoder()
+}
 
-
+const correctbadnumbers = (input) => {
+  if (typeof input != "number") {
+    return 0
+  } else {
+    return parseFloat(input)
+  }
 }
 
   useEffect(() => {
@@ -270,14 +276,14 @@ const handleResize = () => {
           city:  mutateObject.city,
           state:  mutateObject.state,
           employeecount:  mutateObject.employeecount,
-          gross:  mutateObject.gross,
+          gross:   correctbadnumbers(mutateObject.gross),
           isinla:  mutateObject.isinla,
           deptname:  mutateObject.deptname
         }
        } else {
           var objToWrite:any = objectsOfCities[thisKey]
 
-        objToWrite.gross =  objToWrite.gross + mutateObject.gross;
+        objToWrite.gross =  objToWrite.gross +  correctbadnumbers(mutateObject.gross);
         objToWrite.employeecount = objToWrite.employeecount +  mutateObject.employeecount;
 
         objectsOfCities[thisKey] = objToWrite;
@@ -299,7 +305,7 @@ const handleResize = () => {
             "city": eachRow.city,
             "state": eachRow.state,
             "employeecount": eachRow.employeecount,
-            "gross": eachRow.gross,
+            "gross":  correctbadnumbers(eachRow.gross),
             "isinla": eachRow.isinla
           },
           "geometry": {
@@ -567,7 +573,7 @@ const popup = new mapboxgl.Popup({
   // Copy coordinates array.
   const coordinates = e.features[0].geometry.coordinates.slice();
   const description = `${e.features[0].properties.city}, ${e.features[0].properties.state}<br>
-  <b>Number of Employees</b>${parseInt(e.features[0].properties.employeecount).toLocaleString()}<br>
+  <b>Number of Employees</b> ${parseInt(e.features[0].properties.employeecount).toLocaleString()}<br>
   <b>Gross Total</b> $${parseInt(e.features[0].properties.gross).toLocaleString('en-US')}`;
    
 //console.log(e.features)
