@@ -567,7 +567,7 @@ const popup = new mapboxgl.Popup({
   // Copy coordinates array.
   const coordinates = e.features[0].geometry.coordinates.slice();
   const description = `${e.features[0].properties.city}, ${e.features[0].properties.state}<br>
-  <b>Number of Employees</b>${e.features[0].properties.employeecount}<br>
+  <b>Number of Employees</b>${parseInt(e.features[0].properties.employeecount).toLocaleString()}<br>
   <b>Gross Total</b> $${parseInt(e.features[0].properties.gross).toLocaleString('en-US')}`;
    
 //console.log(e.features)
