@@ -152,6 +152,19 @@ function checkHideOrShowTopRightGeocoder() {
  }
 }
 
+const objDeptCityToSummary = (objectOfCity) => {
+  var stringToReturn = ""
+
+  if (Object.values(objectOfCity).length = 1) {
+    for (const [key, value] of Object.entries(objectOfCity)) {
+      //console.log(`${key}: ${value}`);
+      stringToReturn = `${value} ${key}`
+    }
+  } else {
+    stringToReturn = `${Object.values(objectOfCity).reduce((partialSum:number, a:number) => partialSum + a, 0)} in ${Object.keys(objectOfCity).length} dpts`
+  }
+}
+
 const handleResize = () => {
   checkHideOrShowTopRightGeocoder()
 }
@@ -160,7 +173,7 @@ const correctbadnumbers = (input) => {
   if (typeof input != "number") {
     return 0
   } else {
-    return parseFloat(input)
+    return input
   }
 }
 
@@ -187,6 +200,11 @@ const correctbadnumbers = (input) => {
     console.log('number of los angeles towns in solid dataset', employeedatacleaned.filter(eachItem => eachItem.city === "Los Angeles").length);
 
     removemapboxlogo()
+
+
+    var objectOfDeptsForLabelsByCity:any = {
+
+    }
 
     /*
     {
@@ -269,22 +287,33 @@ const correctbadnumbers = (input) => {
 
       let thisKey = `${mutateObject.lng.toFixed(3)}#${mutateObject.lat.toFixed(3)}`
 
+      if (objectOfDeptsForLabelsByCity[thisKey] === undefined) {
+        objectOfDeptsForLabelsByCity[thisKey] = {
+          [mutateObject.deptname]: correctbadnumbers(mutateObject.employeecount)
+        }
+      } else {
+        objectOfDeptsForLabelsByCity[thisKey] = {
+          [mutateObject.deptname]: correctbadnumbers(mutateObject.employeecount) + correctbadnumbers(objectOfDeptsForLabelsByCity[thisKey][mutateObject.deptname])
+        }
+      }
+
       if (objectsOfCities[thisKey] == undefined) {
         objectsOfCities[thisKey] = {
           lat:  mutateObject.lat,
           lng: mutateObject.lng,
           city:  mutateObject.city,
           state:  mutateObject.state,
-          employeecount:  mutateObject.employeecount,
+          employeecount:   correctbadnumbers(mutateObject.employeecount),
           gross:   correctbadnumbers(mutateObject.gross),
           isinla:  mutateObject.isinla,
+          thisKey,
           deptname:  mutateObject.deptname
         }
        } else {
           var objToWrite:any = objectsOfCities[thisKey]
 
         objToWrite.gross =  objToWrite.gross +  correctbadnumbers(mutateObject.gross);
-        objToWrite.employeecount = objToWrite.employeecount +  mutateObject.employeecount;
+        objToWrite.employeecount = objToWrite.employeecount +   correctbadnumbers(mutateObject.employeecount);
 
         objectsOfCities[thisKey] = objToWrite;
 
@@ -306,7 +335,8 @@ const correctbadnumbers = (input) => {
             "state": eachRow.state,
             "employeecount": eachRow.employeecount,
             "gross":  correctbadnumbers(eachRow.gross),
-            "isinla": eachRow.isinla
+            "isinla": eachRow.isinla,
+            "symlabel": objDeptCityToSummary(eachRow.thisKey)
           },
           "geometry": {
             "coordinates": [
@@ -516,7 +546,9 @@ const correctbadnumbers = (input) => {
             0,
             3,
             3056,
-            20]
+            20,
+            20000,
+            30]
             
 
            
