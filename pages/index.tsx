@@ -555,6 +555,14 @@ const correctbadnumbers = (input) => {
           }
         });
 
+        map.addLayer({
+          'id': 'employeemaplabel',
+          'type': 'symbol',
+          "source": 'employeemapsource',
+          "layout": {
+            "text-field": ["get", "symlabel"]
+        });
+
 
         redefineMap()
 
