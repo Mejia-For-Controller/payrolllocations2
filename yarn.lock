@@ -421,7 +421,7 @@
     "react-popper" "^2.2.5"
     "react-textarea-autosize" "^8.3.2"
 
-"@mantine/hooks@4.1.5":
+"@mantine/hooks@^4.1.5", "@mantine/hooks@4.1.5":
   "integrity" "sha512-6zkVaxBT4ajDO3gt5vx388bnSM5eCiIB/EDJaqobeuwt8S2OkxTDCeDtHpNdSczkNVfoShoUzmb8IBtBF4D9Gw=="
   "resolved" "https://registry.npmjs.org/@mantine/hooks/-/hooks-4.1.5.tgz"
   "version" "4.1.5"
