@@ -896,7 +896,7 @@ const popup = new mapboxgl.Popup({
     >
 
 
-  <div className='titleBox fixed text-sm bold md:text-base mt-3.5em sm:mt-3.9em ml-2 md:ml-3 break-words bg-gray-100'>Where LA City Employees Live 2021</div>
+  <div className='titleBox fixed text-sm bold md:text-base mt-3.9em sm:mt-3.9em md:mt-3.5em ml-2 md:ml-3 break-words bg-gray-100'>Where LA City Employees Live 2021</div>
 
   <div className={`fixed flex flex-row gap-x-2 mt-9em sm:mt-6em ml-2 md:ml-3 break-words `}>
         <button
