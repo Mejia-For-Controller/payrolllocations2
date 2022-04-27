@@ -813,7 +813,7 @@ const popup = new mapboxgl.Popup({
  
 
   //  if (window.innerWidth >= 768) {
-    if (true) {
+    if (false) {
       setInfoboxOpen(true)
       setInfoboxPrimed(true)
     } else {
