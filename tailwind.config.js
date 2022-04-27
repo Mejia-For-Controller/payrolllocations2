@@ -1,3 +1,6 @@
+const colors = require('tailwindcss/colors')
+
+
 module.exports = {
    purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   darkMode: false, // or 'media' or 'class'
@@ -5,7 +8,19 @@ module.exports = {
     extend: {
       color: {
         'cucumis': '#1a1a1aee',
-        'extracucumis': '#1a1a1a'
+        'extracucumis': '#1a1a1a',
+        'zinc': {
+          50: '#fafafa',
+          100: '#f4f4f5',
+          200: '#e4e4e7',
+          300: '#d4d4d8',
+          400: '#a1a1a1',
+          500: '#71717a',
+          600: '#52525b',
+          700: '#3f3f46',
+          800: '#27272a',
+          900: '#181818'
+        }
       },
         margin: {
           '3.8em': '3.8em',

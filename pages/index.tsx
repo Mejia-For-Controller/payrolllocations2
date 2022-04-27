@@ -1064,11 +1064,11 @@ style={{
              overflow-y-scroll h-full'>  
       <table className='text-white'>
       <thead>
-        <tr>
-          <th>Dept</th>
-          <th>Employees</th>
-          <th>Gross</th>
-          <th>Avg Payout</th>
+        <tr  className='border-b border-gray-500'>
+          <th className='border-l border-gray-600 text-sm md:text-base'>Dept</th>
+          <th className='border-l border-gray-600  text-sm md:text-base'>Employees</th>
+          <th className='border-l border-gray-600  text-sm md:text-base'>Gross</th>
+          <th className='border-l border-r border-gray-600 text-sm md:text-base pr-2 md:pr-3'>Avg Payout</th>
         </tr>
       </thead>
 
@@ -1078,23 +1078,23 @@ style={{
     infoboxKey && (
 <>
 {dataToShowInfoBoxMeta[infoboxKey] && (
-  <tr key={`total`} className=' font-medium'>
-          <td className='whitespace-pre-line max-w-32'>Grand Total</td>
-          <td>{(dataToShowInfoBoxMeta[infoboxKey].employeecount).toLocaleString('en-US', {maximumFractionDigits: 0})}</td>
-          <td>{(dataToShowInfoBoxMeta[infoboxKey].gross).toLocaleString('en-US', {maximumFractionDigits: 0})}</td>
-          <td>{(dataToShowInfoBoxMeta[infoboxKey].gross / dataToShowInfoBoxMeta[infoboxKey].employeecount).toLocaleString('en-US', {maximumFractionDigits: 0})}</td>
+  <tr  className='border-b border-gray-500 font-medium' key={`total`} >
+          <td className='border-l border-gray-600 text-sm md:text-base whitespace-pre-line max-w-32'>Grand Total</td>
+          <td className='border-l border-gray-600 text-sm md:text-base text-right align-right'>{(dataToShowInfoBoxMeta[infoboxKey].employeecount).toLocaleString('en-US', {maximumFractionDigits: 0})}</td>
+          <td className='border-l border-gray-600 text-sm md:text-base text-right align-right'>{(dataToShowInfoBoxMeta[infoboxKey].gross).toLocaleString('en-US', {maximumFractionDigits: 0})}</td>
+          <td className='border-l border-r border-gray-600 text-sm md:text-base text-right align-right pr-2 md:pr-3'>{(dataToShowInfoBoxMeta[infoboxKey].gross / dataToShowInfoBoxMeta[infoboxKey].employeecount).toLocaleString('en-US', {maximumFractionDigits: 0})}</td>
         </tr>
 )}
 
     {
       Object.entries(dataToShowInfoBoxRows[infoboxKey]).sort((a:any,b:any) => {
       return b[1].gross - a[1].gross
-      }).map((eachValues:any) => (
-        <tr key={eachValues[0]}>
-          <td className='whitespace-pre-line max-w-32'>{eachValues[0]}</td>
-          <td>{(eachValues[1].employeecount).toLocaleString('en-US', {maximumFractionDigits: 0})}</td>
-          <td>{(eachValues[1].gross).toLocaleString('en-US', {maximumFractionDigits: 0})}</td>
-          <td>{(eachValues[1].gross / eachValues[1].employeecount).toLocaleString('en-US', {maximumFractionDigits: 0})}</td>
+      }).map((eachValues:any,deptIndex:Number) => (
+        <tr className={`border-b border-gray-500`} key={eachValues[0]}>
+          <td className=' border-l border-gray-600 text-sm md:text-base  whitespace-pre-line max-w-32'>{eachValues[0]}</td>
+          <td className='border-l border-gray-600  text-sm md:text-base  text-right align-right'>{(eachValues[1].employeecount).toLocaleString('en-US', {maximumFractionDigits: 0})}</td>
+          <td className='border-l border-gray-600 text-sm md:text-base  text-right align-right'>{(eachValues[1].gross).toLocaleString('en-US', {maximumFractionDigits: 0})}</td>
+          <td className='border-l border-r border-gray-600  text-sm md:text-base text-right align-right pr-2 md:pr-3'>{(eachValues[1].gross / eachValues[1].employeecount).toLocaleString('en-US', {maximumFractionDigits: 0})}</td>
         </tr>
       ))
     }
@@ -1123,13 +1123,15 @@ style={{
 
 <p
        onClick={openInfobox}
-       className={` ${(infoboxPrimed === true && infoboxOpen === false) ? '': 'hidden'} rounded-full px-3 py-1 text-black fixed bottom-0 z-50 right-0 mb-2 mr-2`}
+       className={` ${(infoboxPrimed === true && infoboxOpen === false) ? `${(layerOpen && !filterOpen) ? 'bottom-20 sm:bottom-0' : 'bottom-0'}`: 'hidden'} rounded-full px-3 py-1 text-black fixed z-50 right-0 mb-2 mr-2`}
 
        style={{
          background: '#41ffca'
        }}
       >
-        View Rows for City</p>
+        <span>View Rows for </span><span>{infoboxKey && (
+          dataToShowInfoBoxMeta[infoboxKey].city
+        )}</span></p>
 
      <div className={`absolute md:mx-auto z-9 bottom-2 left-1 md:left-1/2 md:transform md:-translate-x-1/2`}>
 <a href='https://MejiaForController.com/' target="_blank" rel="noreferrer">
