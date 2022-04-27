@@ -969,7 +969,7 @@ const popup = new mapboxgl.Popup({
        checked={overlaytext}
        onChange={setOverlaytext}
        />
-        <span  className='text-sm md:text-base'>Overlay City Labels</span>
+        <span  className='text-sm md:text-base'>Overlay Labels</span>
         </div>
 
         
