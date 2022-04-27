@@ -196,16 +196,18 @@ var dataToShowInfoBoxMeta:any = {}
       "isinla": values[0].isinla,
       "state": values[0].state,
       "city": values[0].city,
+      // @ts-ignore
       "employeecount": values.reduce(
         (previousValue, currentValue) => previousValue + correctbadnumbers(currentValue.employeecount),
         0
       ),
+      // @ts-ignore
       "gross": values.reduce(
         (previousValue, currentValue) => previousValue + correctbadnumbers(currentValue.gross),
         0
       )
     }
-
+// @ts-ignore
      values.forEach((value) => {
       if ( dataToShowInfoBoxRows[key]) {
         if (  dataToShowInfoBoxRows[key][value.deptname]) {
@@ -1083,7 +1085,7 @@ style={{
 )}
 
     {
-      Object.entries(dataToShowInfoBoxRows[infoboxKey]).sort((a,b) => {
+      Object.entries(dataToShowInfoBoxRows[infoboxKey]).sort((a:any,b:any) => {
       return b[1].gross - a[1].gross
       }).map((eachValues:any) => (
         <tr key={eachValues[0]}>
