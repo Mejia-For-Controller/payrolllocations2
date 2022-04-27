@@ -7,8 +7,10 @@ import NavTabs from '../components/tabs'
 import { Switch } from '@headlessui/react'
 import { Tab } from '@headlessui/react'
 import employeedata from './data.json'
-
+import { CheckboxGroup, Checkbox } from '@mantine/core';
+import {CloseButton} from '../components/CloseButton'
 import Nav from '../components/nav'
+import { Table } from '@mantine/core';
 
 import {simpleHash} from '../components/hash'
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -28,6 +30,11 @@ import dynamic from 'next/dynamic'
 const citybound = require('./citybounds.json')
 
 Object.freeze(employeedata)
+
+function what(input) {
+  console.log(input)
+  return `${input[0]}`
+}
 
 
 var blankgeojson:any = {
@@ -56,6 +63,7 @@ const formulaForZoom = () => {
 }
 function renameDept(input) {
   return input.replace(/Los Angeles Housing/g,'Housing')
+  .replace(/Economic and Workforce Development/g,'Economic & Workforce Development')
   .replace(/Office of Finance/gi,'Finance').replace(/Recreation and Parks/gi,"Rec & Parks").replace(/Department/gi,"")
   .replace(/El Pueblo De Los Angeles Historical Monument Authority/gi,"El Pueblo")
 }
@@ -65,44 +73,214 @@ function renameShortDept(input) {
   return input.replace(/Public Works - /g, "PW-").replace(/City/gi,"").replace(/Emergency Management/gi,"Emergnecy Mgmt")
 }
 
+const employeedatacleaned = employeedata.map((eachItem:any) => {
+
+  eachItem.deptname = renameDept(eachItem.deptname)
+
+  return eachItem
+
+});
+Object.freeze(employeedatacleaned);
+
+
+const listOfDeptCleaned:Array<String> = employeedatacleaned.map((eachItem) => {
+  return renameShortDept(eachItem.deptname)
+})
+
+const listOfDeptCleanedUniq = _.uniq(listOfDeptCleaned).sort()
+
+console.log('list of dept cleaned for filters', listOfDeptCleanedUniq)
+
 
 
 function Payroll() {
-  const employeedatacleaned = employeedata.map((eachItem:any) => {
+ 
 
-    eachItem.deptname = renameDept(eachItem.deptname)
-  
-    return eachItem
-  
-  });
-  Object.freeze(employeedatacleaned);
+  const labelDeptProcess = (input) => {
+    return input.replace(/Economic & Workforce Development/g, "Economic & Workforce Dev")
+  }
 
 
+  const formulaIfLayerIsOpen = () => {
+    if (typeof window !== "undefined") {
+    if (window.innerWidth > 768 || (window.innerWidth > 640 || window.innerHeight > 640)) {
+      return true
+    } else {
+      return false
+    }
+  } else {
+    return false;
+  }
+  }
 
-  const listOfDeptCleaned:Array<String> = employeedatacleaned.map((eachItem) => {
-    return renameShortDept(eachItem.deptname)
-  })
-  
-  const listOfDeptCleanedUniq = _.uniq(listOfDeptCleaned).sort()
-  
-  console.log('list of dept cleaned for filters', listOfDeptCleanedUniq)
+  const correctbadnumbers = (input) => {
+    if (typeof input != "number") {
+      return 0
+    } else {
+      return input
+    }
+  }
 
   let [disclaimerOpen, setDisclaimerOpen] = useState(false)
   let [layerOpen, setLayerOpen] = useState(false)
   let [filterOpen, setFilterOpen] = useState(false)
+  const [filterArray, setFilterArray] = useState<string[]>(listOfDeptCleanedUniq);
 
   let [mergeNeighborhoods, setMergeNeighborhoods] = useState(true)
-  let [overlaytext, setOverlaytext] = useState(true)
+  let [overlaytext, setOverlaytext] = useState(false)
   let [neighDidFirstRender,setNeighDidFirstRender] = useState(false)
+  let [showMoreAboutCity,setShowMoreAboutCity] = useState(false)
+  let [showInitInstructions,setShowInitInstructions] = useState(true)
+  let [infoboxPrimed, setInfoboxPrimed] = useState(false)
+  let [infoboxKey, setInfoboxKey] = useState(null)
+  let [infoboxOpen, setInfoboxOpen] = useState(false)
+ // textInput must be declared here so the ref can refer to it
+ const mapboxRef = useRef(null);
+ var [mapDataGeojson,setMapDataGeojson] = useState(null);
+ var [mapglobal,setmapglobal] = useState(null);
 
+  const setAllDeptFilter = (event) => {
+    setFilterArray(listOfDeptCleanedUniq)
+  }
+
+  const openInfobox = (event) => {
+    setInfoboxOpen(true);
+    setFilterOpen(false);
+    setLayerOpen(false);
+  }
+
+  const setNoneDeptFilter = (event) => {
+    setFilterArray([])
+  }
+
+  const invertDeptFilter = (event) => {
+    setFilterArray(listOfDeptCleanedUniq.filter(n => !filterArray.includes(n)))
+  }
+
+  const closeLayerBox = () => {
+    setLayerOpen(false)
+  }
+
+  const closeFilterBox = () => {
+    setFilterOpen(false)
+  }
+
+  const closeInfoBox = () => {
+    setInfoboxPrimed(false)
+    setInfoboxOpen(false)
+  }
+
+  var dataToShowInfoBoxPrelim:any = {}
+
+employeedatacleaned.forEach((value) => {
+  
+
+    let thisKey = `${value.lng.toFixed(3)}#${value.lat.toFixed(3)}`
+  
+    if (dataToShowInfoBoxPrelim[thisKey]) {
+      dataToShowInfoBoxPrelim[thisKey].push(value)
+    } else {
+      dataToShowInfoBoxPrelim[thisKey] = [value]
+    }
+});
+
+console.log('dataToShowInfoBoxPrelim', dataToShowInfoBoxPrelim)
+
+var dataToShowInfoBoxRows:any = {}
+
+
+var dataToShowInfoBoxMeta:any = {}
+
+   for (const [key, values] of Object.entries(dataToShowInfoBoxPrelim)) {
+    dataToShowInfoBoxMeta[key] = {
+      "isinla": values[0].isinla,
+      "state": values[0].state,
+      "city": values[0].city,
+      "employeecount": values.reduce(
+        (previousValue, currentValue) => previousValue + correctbadnumbers(currentValue.employeecount),
+        0
+      ),
+      "gross": values.reduce(
+        (previousValue, currentValue) => previousValue + correctbadnumbers(currentValue.gross),
+        0
+      )
+    }
+
+     values.forEach((value) => {
+      if ( dataToShowInfoBoxRows[key]) {
+        if (  dataToShowInfoBoxRows[key][value.deptname]) {
+          dataToShowInfoBoxRows[key] = {
+            ...dataToShowInfoBoxRows[key],
+            [value.deptname]: {
+             "gross": correctbadnumbers(dataToShowInfoBoxRows[key][value.deptname].gross) + correctbadnumbers(value.gross),
+             "employeecount": correctbadnumbers(dataToShowInfoBoxRows[key][value.deptname].employeecount) + correctbadnumbers(value.employeecount)
+            }
+           }
+        } else {
+          dataToShowInfoBoxRows[key] = {
+            ...dataToShowInfoBoxRows[key],
+            [value.deptname]: {
+             "gross": correctbadnumbers(value.gross),
+             "employeecount": correctbadnumbers(value.employeecount)
+            }
+           }
+        }
+        }
+       else {
+        dataToShowInfoBoxRows[key] = {
+          [value.deptname]: {
+            "gross": correctbadnumbers(value.gross),
+            "employeecount": correctbadnumbers(value.employeecount)
+           } 
+        
+      }
+     }
+      }
+
+    
+     )
+    
+  }
+
+  
+
+  console.log('dataToShowInfoBoxMeta', dataToShowInfoBoxMeta)
+  console.log('dataToShowInfoBoxRows', dataToShowInfoBoxRows)
+
+  const checkIfLabelsLayerShouldShow = () => {
+    if (mapglobal) {
+      console.log('mapbox global')
+      var layerforlabels = mapglobal.getLayer('employeemaplabel');
+      if (layerforlabels) {
+        console.log('layer exists')
+        if (overlaytext === true) 
+        {
+          console.log('set visible')
+          mapglobal.setLayoutProperty('employeemaplabel', 'visibility', 'visible');
+      }
+      else {
+        mapglobal.setLayoutProperty('employeemaplabel', 'visibility', 'none');
+      }
+      }
+    
+    }
+  }
+
+  useEffect(() => {
+    checkIfLabelsLayerShouldShow()
+  }, [overlaytext])
+
+  useEffect(()=> {
+    redefineMap()
+  },[filterArray])
 
   const shouldOverrideDisclaimer = () => {
     if (typeof window !== "undefined") {
       // browser code
       if (window.innerWidth >= 768) {
-        return layerOpen
-      } else {
         return false
+      } else {
+        return (layerOpen || infoboxOpen)
       }
     }
      
@@ -117,10 +295,7 @@ function Payroll() {
   }
 
 
-    // textInput must be declared here so the ref can refer to it
-    const mapboxRef = useRef(null);
-    var [mapDataGeojson,setMapDataGeojson] = useState(null);
-    var [mapglobal,setmapglobal] = useState(null);
+   
 
   //  var lat = 34;
    // var lng = -118.41;
@@ -143,7 +318,7 @@ function checkHideOrShowTopRightGeocoder() {
  if (toprightbox) {
   var toprightgeocoderbox:any = toprightbox.querySelector(".mapboxgl-ctrl-geocoder");
   if (toprightgeocoderbox) {
-    if (window.innerWidth >= 768) {
+    if (window.innerWidth >= 640) {
       toprightgeocoderbox.style.display = 'block'
     } else {
       toprightgeocoderbox.style.display = 'none'
@@ -155,27 +330,23 @@ function checkHideOrShowTopRightGeocoder() {
 const objDeptCityToSummary = (objectOfCity) => {
   var stringToReturn = ""
 
-  if (Object.values(objectOfCity).length = 1) {
+  if (Object.values(objectOfCity).length === 1) {
     for (const [key, value] of Object.entries(objectOfCity)) {
       //console.log(`${key}: ${value}`);
-      stringToReturn = `${value} ${key}`
+      stringToReturn = `${value} ${renameShortDept(key)}`
     }
   } else {
     stringToReturn = `${Object.values(objectOfCity).reduce((partialSum:number, a:number) => partialSum + a, 0)} in ${Object.keys(objectOfCity).length} dpts`
   }
+
+  return stringToReturn;
 }
 
 const handleResize = () => {
   checkHideOrShowTopRightGeocoder()
 }
 
-const correctbadnumbers = (input) => {
-  if (typeof input != "number") {
-    return 0
-  } else {
-    return input
-  }
-}
+
 
   useEffect(() => {
     if (mapglobal) {
@@ -261,6 +432,9 @@ const correctbadnumbers = (input) => {
          }
       
   })
+  .filter((eachItem) => {
+    return filterArray.includes(renameShortDept(eachItem.deptname))
+  })
   .forEach((eachRow,rowindex) => {
       let mutateObject:any = eachRow;
 
@@ -293,6 +467,7 @@ const correctbadnumbers = (input) => {
         }
       } else {
         objectOfDeptsForLabelsByCity[thisKey] = {
+          ...objectOfDeptsForLabelsByCity[thisKey],
           [mutateObject.deptname]: correctbadnumbers(mutateObject.employeecount) + correctbadnumbers(objectOfDeptsForLabelsByCity[thisKey][mutateObject.deptname])
         }
       }
@@ -320,6 +495,8 @@ const correctbadnumbers = (input) => {
         }
       });
 
+      console.log('objectOfDeptsForLabelsByCity', objectOfDeptsForLabelsByCity)
+
      // console.log('mergeNeighborhoods', mergeNeighborhoods)
 
       //console.log('objofcity', objectsOfCities)
@@ -336,7 +513,8 @@ const correctbadnumbers = (input) => {
             "employeecount": eachRow.employeecount,
             "gross":  correctbadnumbers(eachRow.gross),
             "isinla": eachRow.isinla,
-            "symlabel": objDeptCityToSummary(eachRow.thisKey)
+            "key": `${eachRow.lng.toFixed(3)}#${eachRow.lat.toFixed(3)}`,
+            "symlabel": objDeptCityToSummary(objectOfDeptsForLabelsByCity[eachRow.thisKey])
           },
           "geometry": {
             "coordinates": [
@@ -351,6 +529,7 @@ const correctbadnumbers = (input) => {
 
 
    //   console.log('ending', simpleHash(JSON.stringify(arrayFeatures)))
+      console.log(arrayFeatures)
 
       setMapDataGeojson({
       "features": arrayFeatures,
@@ -373,6 +552,8 @@ const correctbadnumbers = (input) => {
 
     useEffect(() => {
       var zoom = formulaForZoom()
+
+      setLayerOpen(formulaIfLayerIsOpen())
 
       var customobj:any = {
         container: mapboxRef.current,
@@ -512,7 +693,7 @@ const correctbadnumbers = (input) => {
       
 
       map.on('load', () => {
-
+        
       
         removemapboxlogo()
 
@@ -559,9 +740,26 @@ const correctbadnumbers = (input) => {
           'id': 'employeemaplabel',
           'type': 'symbol',
           "source": 'employeemapsource',
+          "paint": {
+            "text-color": "hsl(189, 100%, 80%)",
+            "text-halo-color": "hsla(164, 100%, 3%, 0.8)",
+            "text-halo-width": 3
+          },
           "layout": {
-            "text-field": ["get", "symlabel"]
-        });
+            "symbol-sort-key": ["-", 10000, ["get", "employeecount"]],
+            "text-field": ["get", "symlabel"],
+            "text-size": 10,
+            "text-font": [
+              "Open Sans Regular",
+              "Arial Unicode MS Regular"
+            ],
+            "text-offset": [0, 1],
+            "visibility": `${overlaytext ? 'visible': 'none'}`
+        }
+      }
+      );
+
+      checkIfLabelsLayerShouldShow()
 
 
         redefineMap()
@@ -596,7 +794,7 @@ const correctbadnumbers = (input) => {
         })
 
         
-
+        checkIfLabelsLayerShouldShow()
       });
 
       
@@ -605,6 +803,19 @@ const popup = new mapboxgl.Popup({
   closeButton: false,
   closeOnClick: false
   });
+
+  map.on('mousedown', 'employeemaplayer', (e:any) => {
+    setShowInitInstructions(false)
+
+    setInfoboxKey(e.features[0].properties.key)
+ 
+
+    if (window.innerWidth >= 768) {
+      setInfoboxOpen(true)
+    } else {
+      setInfoboxPrimed(true)
+    }
+  })
    
   map.on('mousemove', 'employeemaplayer', (e:any) => {
   // Change the cursor style as a UI indicator.
@@ -682,9 +893,9 @@ const popup = new mapboxgl.Popup({
     >
 
 
-  <div className='titleBox fixed text-sm bold md:text-base mt-3.9em ml-2 md:ml-3 break-words bg-gray-100'>Where LA City Employees Live 2021</div>
+  <div className='titleBox fixed text-sm bold md:text-base mt-3.5em sm:mt-3.9em ml-2 md:ml-3 break-words bg-gray-100'>Where LA City Employees Live 2021</div>
 
-  <div className={`fixed flex flex-row gap-x-2 mt-9em md:mt-6.5em ml-2 md:ml-3 break-words `}>
+  <div className={`fixed flex flex-row gap-x-2 mt-9em sm:mt-6em ml-2 md:ml-3 break-words `}>
         <button
         
         onClick={() => {
@@ -703,7 +914,12 @@ const popup = new mapboxgl.Popup({
 
 </svg>
           Layers</span></button>
-        <button className='rounded-full px-3 pb-1.5 pt-0.5 text-sm bold md:text-base bg-gray-800 bg-opacity-80 text-white border-white border-2'><span className='my-auto align-middle'>
+        <button
+          
+          onClick={() => {
+            setFilterOpen(!filterOpen)
+          }}
+        className='rounded-full px-3 pb-1.5 pt-0.5 text-sm bold md:text-base bg-gray-800 bg-opacity-80 text-white border-white border-2'><span className='my-auto align-middle'>
         <svg style={{
           width: '20px',
           height: '20px'
@@ -720,25 +936,28 @@ const popup = new mapboxgl.Popup({
       </div>
 
   <div
-    className={`geocoder md:hidden mt-5.5em xs:text-sm sm:text-base md:text-lg`} id='geocoder'></div>
+    className={`geocoder sm:hidden mt-5.5em xs:text-sm sm:text-base md:text-lg`} id='geocoder'></div>
 
 
-<div className={`md:h-full md:mt-10em md:ml-3`}>
+<div className={`sm:h-full mt-8.7em sm:ml-3 gap-y-2 fixed top-0 bottom-0`}>
 <div
-      className={`${layerOpen === true ? 'block': 'hidden'} frosteduu rounded-lg px-4 py-2 text-gray-100 fixed bottom-0 w-full sm:w-auto sm:bottom-auto border-t border-gray-200 md:border`}
+      className={`${layerOpen === true ? 'block': 'hidden'} frosteduu sm:rounded-lg px-4 py-2 text-gray-100 fixed sm:static bottom-0 w-full sm:w-auto sm:bottom-auto border-t border-gray-200 sm:border `}
 
       style={{
         background:   '#1a1a1aee'
       }}
       >
-        <h2 className='font-bold text-lg'>Layers</h2>
+        <CloseButton
+        onClose={closeLayerBox}
+        />
+        <h2 className='font-bold text-base md:text-lg'>Layers</h2>
         <div className='flex flex-row gap-x-1'>
        <MapboxMejiaSwitch
        screenreader="Merge LA neighborhoods"
        checked={mergeNeighborhoods}
        onChange={setMergeNeighborhoods}
        />
-        <span>Merge LA Neighborhoods</span>
+        <span className='text-sm md:text-base'>Merge LA Neighborhoods</span>
         </div>
         <div className='flex flex-row gap-x-1'>
        <MapboxMejiaSwitch
@@ -746,19 +965,150 @@ const popup = new mapboxgl.Popup({
        checked={overlaytext}
        onChange={setOverlaytext}
        />
-        <span>Overlay City Labels</span>
+        <span  className='text-sm md:text-base'>Overlay City Labels</span>
         </div>
 
         
       </div>
+
+      <div className={`
+      ${filterOpen ? `${layerOpen ? 'mt-14em md:mt-15em' : 'mt-9em'}` : 'hidden'}
+      cucumisedbackground z-50  w-full sm:w-auto pl-2 pb-2 pt-1 md:pt-1.5 mb-1 sm:rounded-lg fixed bottom-0 border-t border-gray-200  sm:border top-32 sm:top-0 sm:bottom-0`}
+       style={{
+   
+      }}
+      >
+
+        <CloseButton
+        onClose={() => {
+          closeFilterBox()
+        }}
+        />
+        
+        <h2 className='font-bold text-base md:text-lg'>Filter</h2>
+              <div className='flex flex-row gap-x-1'>
+              <button className='align-middle bg-gray-800 rounded-lg px-1  border border-gray-400 text-sm md:text-base'
+              onClick={setAllDeptFilter}
+              
+              >Select All</button>
+              <button className='align-middle bg-gray-800 rounded-lg px-1 text-sm md:text-base border border-gray-400'
+             onClick={setNoneDeptFilter}
+              >Unselect All</button>
+              <button 
+               onClick={invertDeptFilter}
+              className='align-middle bg-gray-800 rounded-lg px-1 text-sm md:text-base  border border-gray-400'>Invert</button>
+              </div>
+<div className='
+ scrollbar-thumb-gray-400 scrollbar-rounded scrollbar scrollbar-thin scrollbar-trackgray-900  mejiascrollbar
+overflow-y-scroll h-full'>
+    <CheckboxGroup
+      orientation="vertical"
+      spacing="sm"
+    value={filterArray} onChange={(changes) => {
+      setFilterArray(changes);
+      console.log(changes)
+    }}>
+{listOfDeptCleanedUniq.map((eachDept) => (
+      <Checkbox value={eachDept} label={labelDeptProcess(eachDept)} />
+  ))
+  }
+  </CheckboxGroup>
+  <br/>
+</div>
+      </div>
+</div>
 </div>
 </div>
 
-</div>
+
 
 <div>
 
 </div>
+
+{
+  showInitInstructions && (
+    <p className=' inline-block s
+    absolute ml-2 sm:mx-auto z-9 text-xs md:text-base sm:left-1/2 sm:transform sm:-translate-x-1/2 w-auto 
+    bottom-12 sm:bottom-5 md:bottom-auto md:top-16  text-black  rounded-full px-3'
+style={{
+  background: "#41ffca"
+}}
+    >Hover + Click dots for more info</p>
+  )
+}
+
+{
+  (infoboxKey && infoboxPrimed && infoboxOpen) && (
+    <div className={` text-white 
+    cucumisedbruhbackground z-50 w-full sm:w-auto pl-2 pb-2 pt-1 md:pt-1.5 mb-1 sm:rounded-lg fixed bottom-0 border-t border-gray-200 sm:border top-72 sm:top-0 sm:bottom-0 sm:right-0`}
+     style={{
+ 
+    }}
+    >
+
+
+      <p className='text-white font-bold text-lg'>{dataToShowInfoBoxMeta[infoboxKey].city} {dataToShowInfoBoxMeta[infoboxKey].state}</p>
+   
+      <CloseButton
+        onClose={closeInfoBox}
+        />
+
+
+      <div className='
+              scrollbar-thumb-gray-400 scrollbar-rounded scrollbar scrollbar-thin scrollbar-trackgray-900  mejiascrollbar
+             overflow-y-scroll h-full'>  
+      <table className='text-white'>
+      <thead>
+        <tr>
+          <th>Dept</th>
+          <th>Employees</th>
+          <th>Gross</th>
+          <th>Avg Payout</th>
+        </tr>
+      </thead>
+
+     <tbody>
+       
+   {
+    infoboxKey && (
+<>
+{dataToShowInfoBoxMeta[infoboxKey] && (
+  <tr key={`total`} className=' font-medium'>
+          <td className='whitespace-pre-line max-w-32'>Grand Total</td>
+          <td>{(dataToShowInfoBoxMeta[infoboxKey].employeecount).toLocaleString('en-US', {maximumFractionDigits: 0})}</td>
+          <td>{(dataToShowInfoBoxMeta[infoboxKey].gross).toLocaleString('en-US', {maximumFractionDigits: 0})}</td>
+          <td>{(dataToShowInfoBoxMeta[infoboxKey].gross / dataToShowInfoBoxMeta[infoboxKey].employeecount).toLocaleString('en-US', {maximumFractionDigits: 0})}</td>
+        </tr>
+)}
+
+    {
+      Object.entries(dataToShowInfoBoxRows[infoboxKey]).sort((a,b) => {
+      return b[1].gross - a[1].gross
+      }).map((eachValues:any) => (
+        <tr key={eachValues[0]}>
+          <td className='whitespace-pre-line max-w-32'>{eachValues[0]}</td>
+          <td>{(eachValues[1].employeecount).toLocaleString('en-US', {maximumFractionDigits: 0})}</td>
+          <td>{(eachValues[1].gross).toLocaleString('en-US', {maximumFractionDigits: 0})}</td>
+          <td>{(eachValues[1].gross / eachValues[1].employeecount).toLocaleString('en-US', {maximumFractionDigits: 0})}</td>
+        </tr>
+      ))
+    }
+</>
+    )
+   
+       }
+     </tbody>
+
+  <br/>
+
+
+    </table>
+    </div>
+        
+      </div>
+  )
+}
 
     <DisclaimerPopup
         open={disclaimerOpen}
@@ -766,6 +1116,16 @@ const popup = new mapboxgl.Popup({
         closeModal={closeModal}
         overrideHide={shouldOverrideDisclaimer()}
         />
+
+<p
+       onClick={openInfobox}
+       className={` ${(infoboxPrimed === true && infoboxOpen === false) ? '': 'hidden'} rounded-full px-3 py-1 text-black fixed bottom-0 z-50 right-0 mb-2 mr-2`}
+
+       style={{
+         background: '#41ffca'
+       }}
+      >
+        View Rows for City</p>
 
      <div className={`absolute md:mx-auto z-9 bottom-2 left-1 md:left-1/2 md:transform md:-translate-x-1/2`}>
 <a href='https://MejiaForController.com/' target="_blank" rel="noreferrer">
@@ -779,8 +1139,6 @@ const popup = new mapboxgl.Popup({
     </a>
   
                 </div>
-
-      
        
       </React.StrictMode>
  

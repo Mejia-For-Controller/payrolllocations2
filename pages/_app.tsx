@@ -2,6 +2,7 @@
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import '../styles/globals.css'
 import './App.css'
+import { MantineProvider } from '@mantine/core';
 
 import './mapbox.css'
 import type { AppProps } from 'next/app'
@@ -53,7 +54,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         
 <script defer={true} src="https://helianthus.mejiaforcontroller.com/index.js"></script>
       </Head>
-      <Component {...pageProps} class='height100'/>
+      <MantineProvider theme={{ colorScheme: 'dark' }}>
+      <Component {...pageProps} class='height100'/>    </MantineProvider>
     </div>
   );  
            

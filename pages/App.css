@@ -177,3 +177,24 @@ scroll-margin-right: 3px;
 
 
   
+.cucumisedbackground {
+  background-color: #1a1a1a
+}
+
+.cucumisedbruhbackground {
+  background-color: #1a1a1a
+}
+
+@media (min-width: 640px) { 
+  .cucumisedbackground {
+    background-color: #1a1a1aee
+  }
+
+ }
+
+ @media (min-width: 780px) { 
+  .cucumisedbruhbackground {
+    background-color: #1a1a1aef
+  }
+
+ }
