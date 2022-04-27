@@ -280,9 +280,9 @@ var dataToShowInfoBoxMeta:any = {}
     if (typeof window !== "undefined") {
       // browser code
       if (window.innerWidth >= 768) {
-        return false
+        return (infoboxOpen || infoboxPrimed)
       } else {
-        return (layerOpen || infoboxOpen)
+        return (layerOpen || infoboxOpen || infoboxPrimed)
       }
     }
      
@@ -969,7 +969,7 @@ const popup = new mapboxgl.Popup({
        checked={overlaytext}
        onChange={setOverlaytext}
        />
-        <span  className='text-sm md:text-base'>Overlay Labels</span>
+        <span  className='text-sm md:text-base'>Overlay Employee Count Text</span>
         </div>
 
         
