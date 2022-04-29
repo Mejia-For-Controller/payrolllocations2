@@ -915,6 +915,7 @@ map.on('dragstart', (e) => {
     <meta name="twitter:title" key='twittertitle' content="Where do LA City Employees Live? - Interactive Map"></meta>
 <meta name="twitter:description"  key='twitterdesc' content="LA City Employee Locations and Gross Pay | 2021"></meta>
       <meta name="description" content="LA City Employee Locations and Gross Pay | 2021" />
+      <meta name="twitter:site" content="@kennethmejiala"/>
       <meta name="twitter:image" key='twitterimg' content="https://payrollmap.mejiaforcontroller.com/thumbnail2.png"></meta>
       <meta property="og:url"                content="https://payrollmap.mejiaforcontroller.com/" />
 <meta property="og:type"               content="website" />
