@@ -29,6 +29,7 @@
     "next": "^11.0.1",
     "postcss": "^8.0.0",
     "postcss-preset-env": "^6.7.0",
+    "randomstring": "^1.2.2",
     "react": "latest",
     "react-dom": "latest",
     "react-google-charts": "^3.0.15",
