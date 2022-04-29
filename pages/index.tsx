@@ -745,7 +745,7 @@ const handleResize = () => {
           'type': 'symbol',
           "source": 'employeemapsource',
           "paint": {
-            "text-color": "hsl(189, 100%, 80%)",
+            "text-color": "hsl(189, 100%, 90%)",
             "text-halo-color": "hsla(164, 100%, 3%, 0.8)",
             "text-halo-width": 3
           },
